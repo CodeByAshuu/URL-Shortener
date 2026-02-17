@@ -52,13 +52,13 @@ int main() {
 
             case 2:
                 cout << "Enter short code: ";
-                cin >> shortCode;
+                getline(cin, shortCode);
                 cout << "Original URL: " << service.expandURL(shortCode) << "\n";
                 break;
 
             case 3:
                 cout << "Enter short code: ";
-                cin >> shortCode;
+                getline(cin, shortCode);
                 {
                     URL url = service.getStats(shortCode);
                     if (url.getShortCode().empty()) {
@@ -76,7 +76,7 @@ int main() {
 
             case 4:
                 cout << "Enter short code to delete: ";
-                cin >> shortCode;
+                getline(cin, shortCode);
                 if (service.deleteURL(shortCode)) {
                     cout << "Deleted short code: " << shortCode << "\n";
                 } else {

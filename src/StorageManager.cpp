@@ -31,12 +31,25 @@ unordered_map<string, URL> StorageManager::loadFromFile() {
         if (line.empty()) continue;
         
         vector<string> parts = split(line, '|');
-        if (parts.size() == 5) {
+        // The format is: shortCode|longURL|createdAt|expiryAt|accessCount
+        // parts[0] is shortCode
+        // parts[parts.size()-3] is createdAt
+        // parts[parts.size()-2] is expiryAt
+        // parts[parts.size()-1] is accessCount
+        // Everything in between is the longURL
+        if (parts.size() >= 5) {
             string shortCode = parts[0];
-            string longURL = parts[1];
-            time_t createdAt = stoll(parts[2]);
-            time_t expiryAt = stoll(parts[3]);
-            int accessCount = stoi(parts[4]);
+            
+            // Reconstruct longURL in case it contains '|'
+            string longURL = "";
+            for (size_t i = 1; i <= parts.size() - 4; ++i) {
+                longURL += parts[i];
+                if (i < parts.size() - 4) longURL += "|";
+            }
+
+            time_t createdAt = stoll(parts[parts.size() - 3]);
+            time_t expiryAt = stoll(parts[parts.size() - 2]);
+            int accessCount = stoi(parts[parts.size() - 1]);
 
             URL url(longURL, shortCode, createdAt, expiryAt, accessCount);
             urls[shortCode] = url;

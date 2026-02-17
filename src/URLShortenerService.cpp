@@ -19,6 +19,13 @@ string URLShortenerService::generateShortCode() {
 }
 
 string URLShortenerService::shortenURL(string longURL) {
+    // Check if URL already exists
+    for (const auto& pair : urlMap) {
+        if (pair.second.getLongURL() == longURL) {
+            return "http://short.ly/" + pair.first;
+        }
+    }
+
     string shortCode;
     do {
         shortCode = generateShortCode();
